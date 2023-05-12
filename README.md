@@ -1,4 +1,4 @@
-# turborepo-tailwindcss
+# nvp-ui
 
 A sample setup of a Turborepo monorepository with shared Tailwind CSS configurations.
 
