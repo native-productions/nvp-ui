@@ -1,17 +1,28 @@
-/** @type { import('@storybook/react-vite').StorybookConfig } */
-const config = {
-  stories: ["../stories/**/*.mdx", "../stories/**/*.stories.@(js|jsx|ts|tsx)"],
-  addons: [
-    "@storybook/addon-links",
-    "@storybook/addon-essentials",
-    "@storybook/addon-interactions",
+const path = require("path");
+
+module.exports = {
+  stories: [
+    "../stories/**/*.stories.mdx",
+    "../stories/**/*.stories.tsx",
+    "../stories/**/*.stories.@(js|ts)",
   ],
-  framework: {
-    name: "@storybook/react-vite",
-    options: {},
+  addons: ["@storybook/addon-links", "@storybook/addon-essentials"],
+  framework: "@storybook/react",
+  core: {
+    builder: "@storybook/builder-vite",
   },
-  docs: {
-    autodocs: "tag",
+  async viteFinal(config, { configType }) {
+    // customize the Vite config here
+    return {
+      ...config,
+      resolve: {
+        alias: [
+          {
+            find: "ui",
+            replacement: path.resolve(__dirname, "../../../packages/ui/"),
+          },
+        ],
+      },
+    };
   },
 };
-export default config;
