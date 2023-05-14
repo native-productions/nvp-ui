@@ -3,7 +3,7 @@ import React from "react";
 import { NVPUIConfig } from "../../interfaces/IConfig";
 import { Theme } from "../../interfaces/ITheme";
 
-const configuration: NVPUIConfig = require("/nvp-ui.config.js");
+const configuration: NVPUIConfig = require("/nvp.config.js");
 
 const defaultTheme: Theme = {
   palletes: {
@@ -31,7 +31,7 @@ interface ThemeProviderProps {
 const ThemeProvider = ({ children }: ThemeProviderProps) => {
   if (configuration) {
     if (!configuration.theme) {
-      throw "Theme on configuration file is not provided. Make sure to update your nvp-ui.config.js";
+      throw "Theme on configuration file is not provided. Make sure to update your nvp.config.js";
     }
   }
 
