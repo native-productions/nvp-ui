@@ -11,9 +11,14 @@ export default function Web() {
       <div className="flex w-full min-h-screen justify-center items-center">
         <div className="flex space-x-3 items-center">
           <h1 className="font-bold text-lg">Web</h1>
-          <Button title="Hello world" variants="primary" />
-          <Button title="Hello world" variants="outlined" />
-          <Button title="Hello world" variants="custom" />
+          <Button title="Basic" variants="basic" />
+          <Button title="Outlined" variants="outlined" />
+          <Button
+            title="Custom"
+            variants="custom"
+            customStyle={{ backgroundColor: "red" }}
+          />
+          <Button title="Basic" variants="basic" isLoading={true} />
         </div>
       </div>
     </>

@@ -4,19 +4,15 @@ import React, {
   CSSProperties,
   Fragment,
   ReactNode,
-  useMemo,
 } from "react";
 
-type StylesType<T> = {
-  custom: T;
-  primary: T;
-  outlined: T;
-};
+import useTheme from "../../hooks/useTheme";
+import { Loader } from "../Loader";
 
-const defaultStyles: StylesType<CSSProperties> = {
-  custom: {},
-  primary: {},
-  outlined: {},
+type StylesType<T> = {
+  basic: T;
+  custom: T;
+  outlined: T;
 };
 
 export interface ButtonType extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -24,36 +20,68 @@ export interface ButtonType extends ButtonHTMLAttributes<HTMLButtonElement> {
   endIcon?: ReactNode;
   startIcon?: ReactNode;
   isLoading?: boolean;
-  variants?: "primary" | "outlined" | "custom";
+  customStyle?: CSSProperties;
+  variants?: "basic" | "outlined" | "custom";
 }
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonType>(
   (props, _ref) => {
-    const { title, endIcon, startIcon, variants, isLoading, ...rest } = props;
+    const {
+      title,
+      endIcon,
+      startIcon,
+      variants = "basic",
+      isLoading = false,
+      customStyle = null,
+      ...rest
+    } = props;
 
-    const computedStyle = useMemo(() => {
-      const computeStyle = (v: typeof variants) => {
-        return v === "primary"
-          ? defaultStyles.primary
-          : v === "outlined"
-          ? defaultStyles.outlined
-          : defaultStyles.custom;
-      };
+    const { palletes } = useTheme();
 
-      return computeStyle(variants);
-    }, []);
+    const defaultStyles: StylesType<CSSProperties> = {
+      basic: {
+        color: "white",
+        padding: "0.3rem 0.7rem 0.3rem 0.7rem",
+        borderRadius: "5px",
+        backgroundColor: palletes.light.primary,
+      },
+      outlined: {
+        padding: "0.3rem 0.7rem 0.3rem 0.7rem",
+        borderRadius: "5px",
+        outline: `2px solid ${palletes.light.primary}`,
+        color: palletes.light.primary,
+      },
+      custom: {},
+    };
+
+    const computeStyle = (v: typeof variants) => {
+      return v === "basic"
+        ? { ...defaultStyles.basic, ...customStyle }
+        : v === "outlined"
+        ? { ...defaultStyles.outlined, ...customStyle }
+        : customStyle;
+    };
 
     return (
       <button
         {...rest}
         ref={_ref}
-        style={computedStyle ?? rest.style}
+        style={computeStyle(variants)}
         disabled={isLoading ?? rest.disabled}
       >
-        <Fragment>{startIcon}</Fragment>
-        <Fragment>{title}</Fragment>
-        <Fragment>{endIcon}</Fragment>
+        {!isLoading && (
+          <>
+            <Fragment>{startIcon}</Fragment>
+            <Fragment>{title}</Fragment>
+            <Fragment>{endIcon}</Fragment>
+          </>
+        )}
+        {!!isLoading && <Loader type="circle" size={20} />}
       </button>
     );
   }
 );
+
+Button.defaultProps = {
+  variants: "basic",
+};

@@ -1,3 +1,5 @@
 import { type ButtonType, Button } from "./Button";
 
-export { Button, ButtonType };
+export { Button };
+
+export type { ButtonType };
