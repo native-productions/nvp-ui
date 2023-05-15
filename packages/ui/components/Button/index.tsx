@@ -81,7 +81,13 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonType>(
     }, [btnref]);
 
     if (variants === "custom" && customStyle === null) {
-      throw "customStyle property is not provided. <Button variants='custom' customStyle={/*CSSProperties*/} /> ";
+      throw new Error(
+        `customStyle property is not provided. 
+         <Button 
+           variants='custom' 
+           customStyle={/*CSSProperties*/} 
+         />`
+      );
     }
 
     return (
@@ -90,7 +96,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonType>(
         ref={_ref ?? btnref}
         style={computeStyle(variants)}
         disabled={isLoading ?? rest.disabled}
-        className={`nvp-button ${rest.className ? rest.className : ""}`}
+        className={`nvp-button ${rest.className}`}
       >
         {!isLoading && (
           <>

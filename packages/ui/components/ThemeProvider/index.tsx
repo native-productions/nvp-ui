@@ -22,7 +22,11 @@ const ThemeProvider = ({
 }: ThemeProviderProps) => {
   if (configuration) {
     if (!configuration.theme) {
-      throw "Theme on configuration file is not provided. Make sure to update your nvp.config.js";
+      throw `theme on configuration 
+             file is not provided. 
+             Make sure to setup your 
+             theme configuration 
+             on nvp.config.js file`;
     }
   }
 
