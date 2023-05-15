@@ -5,7 +5,7 @@ import ThemeProvider from "ui/components/ThemeProvider";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ThemeProvider>
+    <ThemeProvider colorScheme="light">
       <Component {...pageProps} />
     </ThemeProvider>
   );

@@ -4,6 +4,9 @@ import React, {
   CSSProperties,
   Fragment,
   ReactNode,
+  useEffect,
+  useRef,
+  useState,
 } from "react";
 
 import useTheme from "../../hooks/useTheme";
@@ -36,38 +39,58 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonType>(
       ...rest
     } = props;
 
-    const { palletes } = useTheme();
+    const [loaderSize, setLoaderSize] = useState(0);
+
+    const btnref = useRef(null);
+    const { palletes, colorScheme } = useTheme();
 
     const defaultStyles: StylesType<CSSProperties> = {
       basic: {
         color: "white",
-        padding: "0.3rem 0.7rem 0.3rem 0.7rem",
+        display: "flex",
         borderRadius: "5px",
-        backgroundColor: palletes.light.primary,
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "0.3rem 0.7rem 0.3rem 0.7rem",
+        backgroundColor: palletes[colorScheme].primary,
       },
       outlined: {
-        padding: "0.3rem 0.7rem 0.3rem 0.7rem",
+        display: "flex",
         borderRadius: "5px",
-        outline: `2px solid ${palletes.light.primary}`,
-        color: palletes.light.primary,
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "0.3rem 0.7rem 0.3rem 0.7rem",
+        color: palletes[colorScheme].primary,
+        outline: `2px solid ${palletes[colorScheme].primary}`,
       },
       custom: {},
     };
 
     const computeStyle = (v: typeof variants) => {
       return v === "basic"
-        ? { ...defaultStyles.basic, ...customStyle }
+        ? { ...defaultStyles.basic, ...customStyle, ...rest.style }
         : v === "outlined"
-        ? { ...defaultStyles.outlined, ...customStyle }
+        ? { ...defaultStyles.outlined, ...customStyle, ...rest.style }
         : customStyle;
     };
+
+    useEffect(() => {
+      if (btnref) {
+        setLoaderSize(btnref.current.clientHeight / 1.7);
+      }
+    }, [btnref]);
+
+    if (variants === "custom" && customStyle === null) {
+      throw "customStyle property is not provided. <Button variants='custom' customStyle={/*CSSProperties*/} /> ";
+    }
 
     return (
       <button
         {...rest}
-        ref={_ref}
+        ref={_ref ?? btnref}
         style={computeStyle(variants)}
         disabled={isLoading ?? rest.disabled}
+        className={`nvp-button ${rest.className ? rest.className : ""}`}
       >
         {!isLoading && (
           <>
@@ -76,7 +99,13 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonType>(
             <Fragment>{endIcon}</Fragment>
           </>
         )}
-        {!!isLoading && <Loader type="circle" size={20} />}
+        {!!isLoading && (
+          <Loader
+            type="circle"
+            color={palletes[colorScheme].secondary}
+            size={loaderSize}
+          />
+        )}
       </button>
     );
   }

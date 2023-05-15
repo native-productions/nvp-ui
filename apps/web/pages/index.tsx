@@ -18,7 +18,12 @@ export default function Web() {
             variants="custom"
             customStyle={{ backgroundColor: "red" }}
           />
-          <Button title="Basic" variants="basic" isLoading={true} />
+          <Button
+            style={{ height: 50, width: "100%" }}
+            title="Basic"
+            variants="basic"
+            isLoading={true}
+          />
         </div>
       </div>
     </>

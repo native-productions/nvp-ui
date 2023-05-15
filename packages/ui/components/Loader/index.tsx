@@ -7,11 +7,12 @@ export interface LoaderType {
   size?: number;
   type?: "circle" | "dots" | "custom";
   el?: JSX.Element;
+  color: string;
 }
 
 export const Loader = React.forwardRef<HTMLDivElement, LoaderType>(
   (props, _ref) => {
-    const { size, el, type = "circle" } = props;
+    const { size, el, color = "#3366bb", type = "circle" } = props;
 
     console.log(size, el, type);
 
@@ -61,7 +62,7 @@ export const Loader = React.forwardRef<HTMLDivElement, LoaderType>(
                 {
                   color: "#000000",
                   fill: "none",
-                  stroke: "#3366bb",
+                  stroke: color,
                   strokeWidth: 8.33705616,
                   strokeLinecap: "round",
                   strokeLinejoin: "miter",

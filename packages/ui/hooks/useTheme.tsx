@@ -3,9 +3,9 @@ import { useContext } from "react";
 import { ThemeContext } from "../components/ThemeProvider";
 
 const useTheme = () => {
-  const { palletes } = useContext(ThemeContext);
+  const { palletes, colorScheme } = useContext(ThemeContext);
 
-  return { palletes };
+  return { palletes, colorScheme };
 };
 
 export default useTheme;

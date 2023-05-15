@@ -1,34 +1,25 @@
 import React from "react";
 
+import { NVP_DEFAULT_THEME } from "../../constants/theme";
 import { NVPUIConfig } from "../../interfaces/IConfig";
 import { Theme } from "../../interfaces/ITheme";
 
 const configuration: NVPUIConfig = require("/nvp.config.js");
+const defaultTheme: Theme = NVP_DEFAULT_THEME;
 
-const defaultTheme: Theme = {
-  palletes: {
-    light: {
-      primary: "#917FB3",
-      secondary: "#E5BEEC",
-      ternary: "#2A2F4F",
-      textColor: {
-        primary: "#FFFFFF",
-        secondary: "rgb(196, 196, 196)",
-        ternary: "#FDE2F3",
-      },
-    },
-  },
-};
+interface ThemeProviderProps {
+  children: React.ReactNode;
+  colorScheme: "light" | "dark";
+}
 
 export const ThemeContext = React.createContext<Theme>(
   configuration && configuration.theme ? configuration.theme : defaultTheme
 );
 
-interface ThemeProviderProps {
-  children: React.ReactNode;
-}
-
-const ThemeProvider = ({ children }: ThemeProviderProps) => {
+const ThemeProvider = ({
+  children,
+  colorScheme = "light",
+}: ThemeProviderProps) => {
   if (configuration) {
     if (!configuration.theme) {
       throw "Theme on configuration file is not provided. Make sure to update your nvp.config.js";
@@ -36,7 +27,9 @@ const ThemeProvider = ({ children }: ThemeProviderProps) => {
   }
 
   return (
-    <ThemeContext.Provider value={configuration.theme ?? defaultTheme}>
+    <ThemeContext.Provider
+      value={{ colorScheme, ...configuration.theme } ?? defaultTheme}
+    >
       {children}
     </ThemeContext.Provider>
   );
